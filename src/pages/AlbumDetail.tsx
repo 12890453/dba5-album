@@ -85,16 +85,19 @@ export function AlbumDetailPage() {
           {photos.map((photo, idx) => {
             const VisIcon = visibilityConfig[photo.visibility].icon;
             return (
-              <Card key={photo.id} className="group relative break-inside-avoid overflow-hidden p-0">
+              <Card
+                key={photo.id}
+                className="group relative break-inside-avoid cursor-pointer overflow-hidden p-0"
+                onClick={() => setSelectedPhoto(idx)}
+              >
                 <img
                   src={photo.thumbnail}
                   alt={photo.caption}
-                  className="w-full cursor-pointer transition-transform duration-300 group-hover:scale-105"
+                  className="w-full transition-transform duration-300 group-hover:scale-105"
                   loading="lazy"
-                  onClick={() => setSelectedPhoto(idx)}
                 />
-                {/* 悬浮遮罩 */}
-                <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-primary/80 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100">
+                {/* 悬浮遮罩（不拦截点击） */}
+                <div className="pointer-events-none absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-primary/80 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100">
                   <div className="p-3 text-white">
                     <p className="truncate text-xs">{photo.caption}</p>
                     <div className="mt-1 flex items-center gap-3 text-[10px]">
@@ -105,14 +108,14 @@ export function AlbumDetailPage() {
                   </div>
                 </div>
                 {/* 可见性标签 */}
-                <div className="absolute right-2 top-2">
+                <div className="pointer-events-none absolute right-2 top-2">
                   <Badge className={`bg-black/40 backdrop-blur-sm ${visibilityConfig[photo.visibility].color}`}>
                     <VisIcon className="mr-1 h-3 w-3" />{visibilityConfig[photo.visibility].label}
                   </Badge>
                 </div>
-                {/* 收藏按钮 */}
+                {/* 收藏按钮（阻止事件冒泡避免触发预览） */}
                 <button
-                  onClick={() => toggleFav(photo.id)}
+                  onClick={(e) => { e.stopPropagation(); toggleFav(photo.id); }}
                   className="absolute left-2 top-2 rounded-full bg-black/40 p-1.5 backdrop-blur-sm transition-colors hover:bg-black/60"
                 >
                   <Heart className={`h-4 w-4 ${favorites.has(photo.id) ? 'fill-red-500 text-red-500' : 'text-white'}`} />
