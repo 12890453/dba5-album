@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createHashRouter, RouterProvider } from 'react-router-dom';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { Layout } from '@/components/layout/Layout';
 import { AdminLayout } from '@/components/layout/AdminLayout';
@@ -19,7 +19,7 @@ import { PhotoManager } from '@/pages/admin/PhotoManager';
 import { ContentManager } from '@/pages/admin/ContentManager';
 import { MaterialManager } from '@/pages/admin/MaterialManager';
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: '/',
     element: <Layout />,
