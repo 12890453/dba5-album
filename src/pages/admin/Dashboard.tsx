@@ -3,11 +3,12 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { BarChart3, Users, FolderOpen, Image as ImageIcon, Megaphone, TrendingUp, Crown, FileDown } from 'lucide-react';
-import { mockStats, mockUsers, mockPhotos } from '@/data/mock';
+import { mockStats, mockUsers } from '@/data/mock';
+import { getLatestPhotos } from '@/data/photoLoader';
 
 export function AdminDashboard() {
   const pendingUsers = mockUsers.filter(u => u.status === 'pending');
-  const recentPhotos = mockPhotos.slice(0, 5);
+  const recentPhotos = getLatestPhotos(5);
 
   return (
     <div className="min-h-screen bg-secondary/30">

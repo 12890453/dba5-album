@@ -4,7 +4,8 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ChevronLeft, ChevronRight, Megaphone, ArrowRight, Heart } from 'lucide-react';
-import { mockUsers, mockPhotos, mockAnnouncements, mockAlbums, mockStats } from '@/data/mock';
+import { mockUsers, mockAnnouncements, mockStats } from '@/data/mock';
+import { getLatestPhotos, getAlbumsWithPhotoCount } from '@/data/photoLoader';
 import { CATEGORY_ICONS, CATEGORY_ORDER } from '@/types';
 
 const heroSlides = [
@@ -21,9 +22,10 @@ export function HomePage() {
     return () => clearInterval(timer);
   }, []);
 
-  const latestPhotos = mockPhotos.slice(0, 12);
+  const latestPhotos = getLatestPhotos(12);
   const showcaseUsers = mockUsers.filter(u => u.role !== 'guest').slice(0, 6);
-  const rootAlbums = CATEGORY_ORDER.map(cat => mockAlbums.find(a => a.category === cat && a.parentId === null)!).filter(Boolean);
+  const allAlbums = getAlbumsWithPhotoCount();
+  const rootAlbums = CATEGORY_ORDER.map(cat => allAlbums.find(a => a.category === cat && a.parentId === null)!).filter(Boolean);
 
   return (
     <div className="bg-background">
@@ -105,7 +107,7 @@ export function HomePage() {
           </div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
             {rootAlbums.map((album, i) => {
-              const subAlbums = mockAlbums.filter(a => a.parentId === album.id);
+              const subAlbums = allAlbums.filter(a => a.parentId === album.id);
               const photoCount = subAlbums.reduce((sum, a) => sum + a.photoCount, 0);
               return (
                 <Link key={album.id} to={`/albums?category=${album.category}`}>

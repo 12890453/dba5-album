@@ -6,7 +6,8 @@ import { Badge } from '@/components/ui/badge';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { ChevronLeft, ChevronRight, X, Heart, MessageCircle, Download, Eye, Lock, Users, Globe } from 'lucide-react';
-import { mockAlbums, mockPhotos, mockComments } from '@/data/mock';
+import { mockComments } from '@/data/mock';
+import { getPhotosByAlbum, getAlbumsWithPhotoCount, getAlbumById } from '@/data/photoLoader';
 import { CATEGORY_LABELS, type PhotoVisibility } from '@/types';
 
 const visibilityConfig: Record<PhotoVisibility, { label: string; icon: typeof Globe; color: string }> = {
@@ -17,12 +18,13 @@ const visibilityConfig: Record<PhotoVisibility, { label: string; icon: typeof Gl
 
 export function AlbumDetailPage() {
   const { albumId } = useParams();
-  const album = mockAlbums.find(a => a.id === albumId);
+  const allAlbums = getAlbumsWithPhotoCount();
+  const album = allAlbums.find(a => a.id === albumId) || getAlbumById(albumId || '');
   const [selectedPhoto, setSelectedPhoto] = useState<number | null>(null);
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
 
   const photos = useMemo(
-    () => mockPhotos.filter(p => p.albumId === albumId),
+    () => getPhotosByAlbum(albumId || ''),
     [albumId]
   );
 
@@ -38,7 +40,7 @@ export function AlbumDetailPage() {
     return <div className="py-20 text-center text-muted-foreground">相册不存在</div>;
   }
 
-  const parentAlbum = album.parentId ? mockAlbums.find(a => a.id === album.parentId) : null;
+  const parentAlbum = album?.parentId ? allAlbums.find(a => a.id === album.parentId) : null;
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 lg:px-8">

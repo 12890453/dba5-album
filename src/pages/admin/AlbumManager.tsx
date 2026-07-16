@@ -12,12 +12,13 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Pencil, Trash2, Plus, ImageUp, FolderOpen, MapPin } from 'lucide-react';
 import { usePersistedState } from '@/hooks/usePersistedState';
-import { mockAlbums as initialAlbums, mockPhotos as initialPhotos } from '@/data/mock';
+import { mockAlbums as initialAlbums } from '@/data/mock';
+import { getAllPhotos } from '@/data/photoLoader';
 import { CATEGORY_LABELS, type Album, type AlbumCategory, type Photo } from '@/types';
 
 export function AlbumManager() {
   const [albums, setAlbums] = usePersistedState('admin_albums', initialAlbums);
-  const [photos, setPhotos] = usePersistedState('admin_photos', initialPhotos);
+  const [photos, setPhotos] = usePersistedState('admin_photos', getAllPhotos());
   const [showDialog, setShowDialog] = useState(false);
   const [editing, setEditing] = useState<Album | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<Album | null>(null);

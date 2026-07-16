@@ -9,13 +9,14 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Checkbox } from '@/components/ui/checkbox';
 import { Search, Trash2, MoveRight, Image as ImageIcon } from 'lucide-react';
 import { usePersistedState } from '@/hooks/usePersistedState';
-import { mockPhotos as initialPhotos, mockAlbums as initialAlbums } from '@/data/mock';
+import { mockAlbums as initialAlbums } from '@/data/mock';
+import { getAllPhotos } from '@/data/photoLoader';
 import type { Photo } from '@/types';
 
 const VIS_LABELS: Record<string, string> = { public: '公开', class_only: '班级可见', private: '仅自己' };
 
 export function PhotoManager() {
-  const [photos, setPhotos] = usePersistedState('admin_photos', initialPhotos);
+  const [photos, setPhotos] = usePersistedState('admin_photos', getAllPhotos());
   const [albums] = usePersistedState('admin_albums_search', initialAlbums);
   const subAlbums = albums.filter(a => a.parentId !== null);
   const [search, setSearch] = useState('');

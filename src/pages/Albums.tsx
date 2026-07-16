@@ -4,12 +4,13 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { Image as ImageIcon, Calendar, MapPin } from 'lucide-react';
-import { mockAlbums } from '@/data/mock';
+import { getAlbumsWithPhotoCount } from '@/data/photoLoader';
 import { CATEGORY_LABELS, CATEGORY_ICONS, CATEGORY_ORDER, type AlbumCategory } from '@/types';
 
 export function AlbumsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const activeCategory = (searchParams.get('category') as AlbumCategory) || 'orientation';
+  const allAlbums = getAlbumsWithPhotoCount();
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 lg:px-8">
@@ -43,7 +44,7 @@ export function AlbumsPage() {
         {CATEGORY_ORDER.map(cat => (
           <div key={cat} className={cat === activeCategory ? 'block' : 'hidden'}>
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {mockAlbums.filter(a => a.parentId !== null && a.category === cat).map(album => (
+              {allAlbums.filter(a => a.parentId !== null && a.category === cat).map(album => (
                 <Link key={album.id} to={`/albums/${album.id}`}>
                   <Card className="group overflow-hidden transition-all hover:shadow-lg cursor-pointer h-full">
                     <div className="relative aspect-[3/2] overflow-hidden">
